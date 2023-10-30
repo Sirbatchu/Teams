@@ -21,7 +21,7 @@ $SPAdminUrl = 'https://52c5r0-admin.sharepoint.com' # Read-Host 'Enter the Share
 $BaseDownloadDir = 'C:\IT\Class Notebook Export\'
 
 # Connect to the PnP.PowerShell Module
-Write-Host "Connecting to PowesShell, enter SharePoint Admin credentials when prompted. (Accept the permissions if this is this is the first time you are connecting to this tenant)" -foregroundcolor green
+Write-Host "Connecting to PowerShell, enter SharePoint Admin credentials when prompted. (Accept the permissions if this is this is the first time you are connecting to this tenant)" -foregroundcolor green
 try {
     Connect-PnPOnline -Url $SPAdminUrl -Interactive
     Write-Host "Successfully connect to $SPAdminUrl" -ForegroundColor Green
@@ -37,16 +37,18 @@ $BaseSPURL = $SPAdminUrl.Replace("-admin", "")
 TODO would it be better to load all of the SP URLs for the sites where we know we need to download the class notebooks?
 $AllSPSiteURLs = Get-PnPTenantSite | Where-Object {(($_.Url -like $BaseSPURL + "/sites/*") -or ($_.Url -like $BaseSPURL +  "/teams/*")) -and ($_.Url -notlike $BaseSPURL + "/sites/appcatalog*")}
 
-TODO Add in the function to download teh contents of a SP folder
+TODO Add in the function to download the contents of a SP folder
 TODO Call the above function in a ForEach loop parsing in the $SPDownloadURL that is created from the below
 ForEach ($URL in $AllSPSiteURLs) {
-    $SPDownloadURL = $BaseSPURL + '/' +  $URL.Url.Split("/")[-1] + '/' + '/path/to/class/notebook/'
+    $SPDownloadURL = $BaseSPURL + '/' +  $URL.Url.Split("/")[-1] + '/' + '/SiteAssets/Class Notebooks/'
     Write-Host $SPDownloadURL -ForegroundColor Cyan 
 }
 
 
 # TEST AREA - DO NOT RUN IN PROD
 ForEach ($URL in $AllSPSiteURLs) {
-    $SPDownloadURL = $BaseSPURL + '/' +  $URL.Url.Split("/")[-1] + '/' + '/path/to/class/notebook/'
+    $SPDownloadURL = $BaseSPURL + '/' +  $URL.Url.Split("/")[-1] + '/SiteAssets/' + $URL.Title + ' Notebook/'
     Write-Host $SPDownloadURL -ForegroundColor Cyan 
 }
+
+https://bethanyschooluk.sharepoint.com/sites/9HHistory2023-2024/SiteAssets/9H History 2023-2024 Notebook/*PUPIL NAME*/
