@@ -17,19 +17,35 @@ catch {
 # Set PnP.PowerShell Connection Variables
 $SPAdminUrl = 'https://52c5r0-admin.sharepoint.com' # Read-Host 'Enter the SharePoint admin URL (E.g. "https://contoso-admin.sharepoint.com")'
 
+# Set local download directory
+$BaseDownloadDir = 'C:\IT\Class Notebook Export\'
+
 # Connect to the PnP.PowerShell Module
-Write-Host "Connecting to PowesShell, enter SharePoint Admin credential when prompted. (Accept the permissions if this is this is the first time you are connecting to this tenant)" -foregroundcolor green
+Write-Host "Connecting to PowesShell, enter SharePoint Admin credentials when prompted. (Accept the permissions if this is this is the first time you are connecting to this tenant)" -foregroundcolor green
 try {
     Connect-PnPOnline -Url $SPAdminUrl -Interactive
+    Write-Host "Successfully connect to $SPAdminUrl" -ForegroundColor Green
 }
 catch {
     write-host "Error: $($_.Exception.Message)" -foregroundcolor red
 }
 
+# Get Base SP URL
+$BaseSPURL = $SPAdminUrl.Replace("-admin", "")
+
 # Load all applicable Site URLs into a variable
-$AllSPSiteURLs = Get-PnPTenantSite | Where-Object {(($_.Url -like "https://52c5r0.sharepoint.com/sites/*") -or ($_.Url -like "https://52c5r0.sharepoint.com/teams/*")) -and ($_.Url -notlike "https://52c5r0.sharepoint.com/sites/appcatalog*")}
+$AllSPSiteURLs = Get-PnPTenantSite | Where-Object {(($_.Url -like $BaseSPURL + "/sites/*") -or ($_.Url -like $BaseSPURL +  "/teams/*")) -and ($_.Url -notlike $BaseSPURL + "/sites/appcatalog*")}
 
-# Manipulate the $_.Url values to extract the group name portion of the URL
-ForEach-Object ($SPSiteURL in $AllSPSiteURLs) {
+TODO Add in the function to download teh contents of a SP folder
+TODO Call the above function in a ForEach loop parsing in the $SPDownloadURL that is created from the below
+ForEach ($URL in $AllSPSiteURLs) {
+    $SPDownloadURL = $BaseSPURL + '/' +  $URL.Url.Split("/")[-1] + '/' + '/path/to/class/notebook/'
+    Write-Host $SPDownloadURL -ForegroundColor Cyan 
+}
 
-} 
+
+# TEST AREA - DO NOT RUN IN PROD
+ForEach ($URL in $AllSPSiteURLs) {
+    $SPDownloadURL = $BaseSPURL + '/' +  $URL.Url.Split("/")[-1] + '/' + '/path/to/class/notebook/'
+    Write-Host $SPDownloadURL -ForegroundColor Cyan 
+}
