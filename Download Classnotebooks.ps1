@@ -13,21 +13,6 @@ try {
 catch {
     write-host "Error: $($_.Exception.Message)" -foregroundcolor red
 }
-# Check if Microsoft.Online.SharePoint.PowerShell is installed
-try {
-    if (Get-Module -ListAvailable -Name 'PnP.PowerShell') {
-        Write-Host "The PnP.PowerShell Module is already installed"
-    } 
-    else {
-        Write-Host "Now installing the PnP.PowerShell module"
-        Install-Module -Name PnP.PowerShell -Force
-    }
-}
-catch {
-    write-host "Error: $($_.Exception.Message)" -foregroundcolor red
-}
-
-Install-Module -Name Microsoft.Online.SharePoint.PowerShell
 
 # Set PnP.PowerShell Connection Variables
 $SPAdminUrl = 'https://52c5r0-admin.sharepoint.com' # Read-Host 'Enter the SharePoint admin URL (E.g. "https://contoso-admin.sharepoint.com")'
@@ -41,5 +26,5 @@ catch {
     write-host "Error: $($_.Exception.Message)" -foregroundcolor red
 }
 
-$AllSPSiteURLs = 
+$AllSPSiteURLs = Get-PnPTenantSite | Where-Object {(($_.Url -like "https://52c5r0.sharepoint.com/sites/*") -or ($_.Url -like "https://52c5r0.sharepoint.com/teams/*")) -and ($_.Url -notlike "https://52c5r0.sharepoint.com/sites/appcatalog*")}
 
