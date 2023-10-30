@@ -26,5 +26,10 @@ catch {
     write-host "Error: $($_.Exception.Message)" -foregroundcolor red
 }
 
+# Load all applicable Site URLs into a variable
 $AllSPSiteURLs = Get-PnPTenantSite | Where-Object {(($_.Url -like "https://52c5r0.sharepoint.com/sites/*") -or ($_.Url -like "https://52c5r0.sharepoint.com/teams/*")) -and ($_.Url -notlike "https://52c5r0.sharepoint.com/sites/appcatalog*")}
 
+# Manipulate the $_.Url values to extract the group name portion of the URL
+ForEach-Object ($SPSiteURL in $AllSPSiteURLs) {
+
+} 
