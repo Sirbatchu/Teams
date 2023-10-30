@@ -34,6 +34,7 @@ catch {
 $BaseSPURL = $SPAdminUrl.Replace("-admin", "")
 
 # Load all applicable Site URLs into a variable
+TODO would it be better to load all of the SP URLs for the sites where we know we need to download the class notebooks?
 $AllSPSiteURLs = Get-PnPTenantSite | Where-Object {(($_.Url -like $BaseSPURL + "/sites/*") -or ($_.Url -like $BaseSPURL +  "/teams/*")) -and ($_.Url -notlike $BaseSPURL + "/sites/appcatalog*")}
 
 TODO Add in the function to download teh contents of a SP folder
